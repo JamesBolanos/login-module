@@ -2,8 +2,6 @@ import vercel from '@sveltejs/adapter-vercel';
 
 export default {
     kit: {
-        adapter: vercel({
-            runtime: 'nodejs18.x', // Specify Node.js version
-        })
+        adapter: vercel()
     }
 };
