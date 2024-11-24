@@ -2,6 +2,8 @@ import bcrypt from 'bcrypt';
 import { sql } from '@vercel/postgres';
 import dotenv from 'dotenv';
 
+dotenv.config({ path: '.env.local' });
+
 export async function POST({ request }) {
     const { numero_telefono, pin } = await request.json();
 
@@ -15,26 +17,26 @@ export async function POST({ request }) {
 
         const user = rows[0];
         if (!user) {
-            return {
-                status: 401,
-                body: { message: 'Invalid phone number or PIN' },
-            };
+            return new Response(
+                JSON.stringify({ message: 'Invalid phone number or PIN' }),
+                { status: 401, headers: { 'Content-Type': 'application/json' } }
+            );
         }
 
         // Validate PIN
         const isValidPin = await bcrypt.compare(pin, user.pin_hash);
         if (!isValidPin) {
-            return {
-                status: 401,
-                body: { message: 'Invalid phone number or PIN' },
-            };
+            return new Response(
+                JSON.stringify({ message: 'Invalid phone number or PIN' }),
+                { status: 401, headers: { 'Content-Type': 'application/json' } }
+            );
         }
 
         if (!user.activo) {
-            return {
-                status: 403,
-                body: { message: 'Account is inactive' },
-            };
+            return new Response(
+                JSON.stringify({ message: 'Account is inactive' }),
+                { status: 403, headers: { 'Content-Type': 'application/json' } }
+            );
         }
 
         // Update last login
@@ -44,9 +46,8 @@ export async function POST({ request }) {
             WHERE id = ${user.id}
         `;
 
-        return {
-            status: 200,
-            body: {
+        return new Response(
+            JSON.stringify({
                 message: 'Login successful',
                 user: {
                     id: user.id,
@@ -54,13 +55,14 @@ export async function POST({ request }) {
                     apellido: user.apellido,
                     rol_id: user.rol_id,
                 },
-            },
-        };
+            }),
+            { status: 200, headers: { 'Content-Type': 'application/json' } }
+        );
     } catch (error) {
         console.error('Error during login:', error);
-        return {
-            status: 500,
-            body: { message: 'Internal server error' },
-        };
+        return new Response(
+            JSON.stringify({ message: 'Internal server error' }),
+            { status: 500, headers: { 'Content-Type': 'application/json' } }
+        );
     }
 }
