@@ -7,18 +7,21 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"format": "prettier --write .",
-		"lint": "prettier --check ."
+		"lint": "prettier --check .",
+		"test": "vitest"
 	},
 	"devDependencies": {
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"autoprefixer": "^10.4.20",
+		"jsdom": "^25.0.1",
 		"prettier": "^3.3.2",
 		"prettier-plugin-svelte": "^3.2.6",
 		"prettier-plugin-tailwindcss": "^0.6.5",
 		"svelte": "^5.0.0",
 		"tailwindcss": "^3.4.9",
-		"vite": "^5.0.3"
+		"vite": "^5.0.3",
+		"vitest": "^2.1.5"
 	},
 	"dependencies": {
 		"@sveltejs/adapter-vercel": "^5.4.8",
