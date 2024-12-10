@@ -4,26 +4,36 @@
   let message = '';
 
   async function login() {
-    try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ numero_telefono, pin }),
-      });
+  try {
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ numero_telefono, pin }),
+    });
 
-      const result = await response.json();
-      if (!response.ok) {
-        message = result.message;
-        return;
-      }
+    const result = await response.json();
 
-      message = result.message || 'Login successful!';
-    } catch (err) {
-      message = 'An error occurred. Please try again.';
+    if (!response.ok) {
+      message = result.message;
+      return;
     }
+
+    // Redirect to "Change PIN" page if required
+    if (result.user.debe_cambiar_pin) {
+      message = 'You need to change your PIN.';
+      window.location.href = '/change-pin'; // Redirect to "Change PIN" page
+      return;
+    }
+
+    message = result.message || 'Login successful!';
+    window.location.href = '/menu'; // Redirect to the dashboard after successful login
+  } catch (err) {
+    message = 'An error occurred. Please try again.';
   }
+}
+
 </script>
 
 <div class="flex items-center justify-center min-h-screen bg-gray-100">
