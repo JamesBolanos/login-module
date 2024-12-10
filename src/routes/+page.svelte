@@ -5,7 +5,7 @@
 
   async function login() {
   try {
-    const response = await fetch('/api/login', {
+    const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -23,12 +23,12 @@
     // Redirect to "Change PIN" page if required
     if (result.user.debe_cambiar_pin) {
       message = 'You need to change your PIN.';
-      window.location.href = '/change-pin'; // Redirect to "Change PIN" page
+      window.location.href = '/forms/change-pin'; // Redirect to "Change PIN" page
       return;
     }
 
     message = result.message || 'Login successful!';
-    window.location.href = '/menu'; // Redirect to the dashboard after successful login
+    window.location.href = '/forms/menu'; // Redirect to the dashboard after successful login
   } catch (err) {
     message = 'An error occurred. Please try again.';
   }
